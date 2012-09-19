@@ -37,6 +37,8 @@ class este.demos.app.simple.products.View extends este.app.View
         name: 'Magic box', description: 'Something wonderful...'
       ,
         name: 'Blue table', description: 'Just a table.'
+      , 
+        name: 'Test', description: 'Test content.'
       ,
         name: 'Red light', description: 'You know it from district.'
       ]

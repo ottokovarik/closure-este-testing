@@ -1,5 +1,7 @@
 # http://git-scm.com/docs/gitignore
 
+nbproject/*
+
 .DS_Store
 este.sublime-workspace
 
