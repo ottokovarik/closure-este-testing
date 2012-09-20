@@ -49,7 +49,7 @@ class fflibrary.ui.InvisibleOverlay extends este.ui.InvisibleOverlay
     @getElement().parentNode.style.position = 'relative'
     @getHandler().
       listen(@getElement(), 'click', @onClick).
-      listen(@getElement(), InvisibleOverlay.EventType.START_REMOVE, @onClick)
+      listen(@, InvisibleOverlay.EventType.START_REMOVE, @onClick)
     return
 
   ###*
