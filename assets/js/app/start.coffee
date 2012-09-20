@@ -11,6 +11,7 @@ goog.require 'goog.dom.DomHelper'
 goog.require 'goog.ui.Component'
 goog.require 'goog.ui.HsvPalette'
 goog.require 'goog.dom.query'
+goog.require 'goog.ui.LabelInput'
 
 goog.require 'este.ui.InvisibleOverlay'
 goog.require 'este.ui.FieldReset'
@@ -30,13 +31,10 @@ app.start = (data) ->
   goog.dom.append body, el
 
 
-  #elCol = colorPallete.createDom()
-  #goog.dom.append body, elCol
+  inputCol = new goog.ui.LabelInput 'napis "open"'
+  inputCol.render body
 
-
-  inputCol = goog.dom.createDom 'input', {name: 'colorHex'}
-  goog.dom.append body, inputCol
-  inputHandler = new goog.events.InputHandler inputCol
+  inputHandler = new goog.events.InputHandler inputCol.getElement()
 
 
 
@@ -49,6 +47,7 @@ app.start = (data) ->
   #if input has value "open" remove invisibleOverlay
   goog.events.listen inputHandler, 'input', (e) ->
     if e.target.value == 'open'
+      #alert 'oteviram'
       #invisibleOverlay.onClick()   #funguje, ale asi neni spravne 
       #invisibleOverlay.dispatchEvent fflibrary.ui.InvisibleOverlay.EventType.REMOVE    #tohle taky funguje, ale jina eventType ne
       invisibleOverlay.dispatchEvent fflibrary.ui.InvisibleOverlay.EventType.START_REMOVE
