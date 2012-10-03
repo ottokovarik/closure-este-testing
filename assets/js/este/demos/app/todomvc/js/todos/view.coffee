@@ -38,23 +38,41 @@ class este.demos.app.todomvc.todos.View extends este.app.View
   ###*
     @inheritDoc
   ###
-  render: ->
-    # json = @todos.toJson()
-    # JSON.stringify json
-    # JSON.stringify json
+  onLoad: ->
     @getElement().innerHTML = este.demos.app.todomvc.todos.templates.items()
-    # window['console']['log'] "products rendered"
-    # # console.log products
-    # links = []
-    # for product in products
-    #   # no url hardcoding, urls are always generated
-    #   url = @getUrl este.demos.app.simple.product.View, id: product['clientId']
-    #   links.push "<li><a e-href='#{url}'>#{url}</a>"
-
-    # @getElement().innerHTML = """
-    #   <p>products</p>
-    #   <ul>
-    #     #{links.join ''}
-    #   </ul>
-    # """
     return
+
+  ###*
+    @inheritDoc
+  ###
+  enterDocument: ->
+    super()
+    @on @todos, 'change', @onTodosChange
+    # @delegate '#clear-completed', 'click', @onClearCompletedClick
+    # @delegate 'input.field', ['focus', 'blur'], @onClearCompletedClick
+    # @delegate '#new-todo', goog.events.KeyCodes.ENTER, @onNewTodoEnter
+    # # for mobile and desktop both
+    # @delegate '#clear-completed', 'tap': @onClearCompletedTap
+    # # submit can bubble to, with automatic form2json
+    # @delegate '#new-fok', 'submit', @onNewFokSubmit
+
+  ###*
+    @param {goog.events.BrowserEvent} e
+    @protected
+  ###
+  onClearCompletedClick: (e) ->
+    window['console']['log'] e.type
+
+  ###*
+    @param {goog.events.BrowserEvent} e
+    @protected
+  ###
+  onNewTodoEnter: (e) ->
+    window['console']['log'] 'enter'
+
+  ###*
+    @param {goog.events.Event} e
+    @protected
+  ###
+  onTodosChange: (e) ->
+    # todo: persist and onLoad

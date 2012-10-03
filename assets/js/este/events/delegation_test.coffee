@@ -20,13 +20,23 @@ suite 'este.events.Delegation', ->
 
 	suite 'should dispatch click', ->
 		test 'on element with className .target and with parent className .parent', (done) ->
-			goog.events.listenOnce delegation, 'click', -> done()
+			goog.events.listenOnce delegation, 'click', ->
+				done()
 			goog.events.fireListeners element, 'click', false,
 				type: 'click'
 				target:
 					className: 'target'
 					parentNode:
 						className: 'parent'
+
+		test 'on element with className .target and without parent', (done) ->
+			delete delegation.targetParentFilter
+			goog.events.listenOnce delegation, 'click', ->
+				done()
+			goog.events.fireListeners element, 'click', false,
+				type: 'click'
+				target:
+					className: 'target'
 
 		test 'on element inside el with className .target and with parent className .parent', (done) ->
 			target =
@@ -90,15 +100,40 @@ suite 'este.events.Delegation', ->
 					parentNode: target
 			assert.isFalse called
 
+	suite 'w3c', ->
+		suite 'focus', ->
+			test 'should call addEventListener', (done) ->
+				element.addEventListener = (type, fn, capture) ->
+					assert.equal type, 'focus'
+					assert.isFunction fn
+					assert.isTrue capture
+					done()
+				delegation = new Delegation element, 'focus'
 
+		suite 'blur', ->
+			test 'should call addEventListener', (done) ->
+				element.addEventListener = (type, fn, capture) ->
+					assert.equal type, 'blur'
+					assert.isFunction fn
+					assert.isTrue capture
+					done()
+				delegation = new Delegation element, 'blur'
 
+	suite 'ie', ->
+		suite 'focus', ->
+			test 'should call addEventListener', (done) ->
+				element.addEventListener = (type, fn, capture) ->
+					assert.equal type, 'focusin'
+					assert.isFunction fn
+					assert.isFalse capture
+					done()
+				delegation = new Delegation element, 'focus', true
 
-
-
-
-
-
-
-
-
-
+		suite 'blur', ->
+			test 'should call addEventListener', (done) ->
+				element.addEventListener = (type, fn, capture) ->
+					assert.equal type, 'focusout'
+					assert.isFunction fn
+					assert.isFalse capture
+					done()
+				delegation = new Delegation element, 'blur', true

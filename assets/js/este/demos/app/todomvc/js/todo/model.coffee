@@ -14,10 +14,13 @@ class este.demos.app.todomvc.todo.Model extends este.Model
   ###
   constructor: (json) ->
     super json
-    return if !json
-    @set
-      'title': ''
-      'completed': false
+
+  ###*
+    @inheritDoc
+  ###
+  defaults:
+    'title': ''
+    'completed': false
 
   ###*
     @inheritDoc

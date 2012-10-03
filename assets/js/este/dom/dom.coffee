@@ -13,7 +13,6 @@ goog.require 'goog.array'
 `
 /**
   Extracted and modified goog.dom.query getQueryParts method.
-  todo: rewrite into def object?
   Returns [
     query: null, // the full text of the part's rule
     pseudos: [], // CSS supports multiple pseudo-class matches in a single
@@ -349,18 +348,19 @@ goog.scope ->
   `var _ = este.dom`
 
   ###*
-    Element matcher for getQueryParts.
-    @param {Element} el
-    @param {string} matcher
+    ex. <a class='foo'></a>, 'a.foo'
+    todo: add pseudos and attrs, make tag case insensitive, tests
+    @param {Node} node
+    @param {string} selector
     @return {boolean}
   ###
-  _.matchQueryParts = (el, matcher) ->
-    queryParts = _.getQueryParts matcher
+  _.match = (node, selector) ->
+    queryParts = _.getQueryParts selector
     for part in queryParts
-      return false if part.tag && part.tag != '*' && el.tagName != part.tag
-      return false if part.id && el.id != part.id
+      return false if part.tag && part.tag != '*' && node.tagName != part.tag
+      return false if part.id && node.id != part.id
       for className in part.classes
-        return false if !goog.dom.classes.has el, className
+        return false if !goog.dom.classes.has node, className
     true
 
   ###*
@@ -426,8 +426,7 @@ goog.scope ->
     false
 
   ###*
-    Alias for goog.dom.forms.getForm...
-
+    Alias for goog.dom.forms.getFormDataMap(form).toObject().
     @param {Element} form
     @return {Object}
   ###
@@ -451,19 +450,6 @@ goog.scope ->
     return value if !goog.isArray value
     return null if value.length == 0
     value[0]
-
-  ###*
-    todo:
-      get element (parents) dompath
-      if retrieve localStored dompath (window.location involved)
-        unlisten previous listeners
-        restore states
-      register events to store fields state
-        store states into localStorage
-
-    @param {Element} element
-  ###
-  _.fieldsState = (element) ->
 
   ###*
     @param {Element} element

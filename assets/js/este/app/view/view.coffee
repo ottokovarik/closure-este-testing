@@ -2,23 +2,21 @@
   @fileoverview este.app.View.
 ###
 goog.provide 'este.app.View'
-goog.provide 'este.app.View.Event'
 goog.provide 'este.app.View.EventType'
 
-goog.require 'este.Base'
+goog.require 'este.app.view.Event'
 goog.require 'este.result'
 goog.require 'este.router.Route'
-goog.require 'goog.dom'
-goog.require 'goog.events.Event'
+goog.require 'este.ui.Component'
 
-class este.app.View extends este.Base
+class este.app.View extends este.ui.Component
 
   ###*
     @constructor
-    @extends {este.Base}
+    @extends {este.ui.Component}
   ###
   constructor: ->
-    super
+    super()
 
   ###*
     @enum {string}
@@ -27,8 +25,10 @@ class este.app.View extends este.Base
     REDIRECT: 'redirect'
 
   ###*
-    for example 'detail/:id'
-    handle actions via switch
+    Null - no url projection
+    empty string - root
+    some url - 'detail/:id'
+    Handle actions with switch.
     @type {?string}
   ###
   url: null
@@ -39,17 +39,17 @@ class este.app.View extends este.Base
   localStorage: null
 
   ###*
-    @type {Element}
-    @protected
-  ###
-  element: null
-
-  ###*
     @param {Object=} params
     @return {!goog.result.Result}
   ###
   load: (params) ->
     este.result.ok params
+
+  ###*
+    onLoad method can be canceled, if another view is shown #lastclickwin
+  ###
+  onLoad: ->
+    # innerHTML = template + viewModel
 
   ###*
     @param {function(new:este.app.View)} viewClass
@@ -62,63 +62,10 @@ class este.app.View extends este.Base
     este.router.Route.getUrl url, params
 
   ###*
-    Render view.
-  ###
-  render: ->
-    # innerHTML = template + viewModel
-
-  ###*
-    Override to register events or instantiate short livings object.
-  ###
-  enterDocument: ->
-
-  ###*
-    Override to dispose what were registered or instantied in enterDocument
-  ###
-  exitDocument: ->
-    @getHandler().removeAll()
-
-  ###*
-    @return {Element}
-  ###
-  getElement: ->
-    @element ?= document.createElement 'div'
-
-  ###*
     @param {function(new:este.app.View)} viewClass
     @param {Object=} params
     @protected
   ###
   redirect: (viewClass, params) ->
-    e = new este.app.View.Event viewClass, params
+    e = new este.app.view.Event View.EventType.REDIRECT, viewClass, params
     @dispatchEvent e
-
-  ###*
-    @inheritDoc
-  ###
-  disposeInternal: ->
-    @exitDocument()
-    goog.dom.removeNode @element if @element
-    super
-    return
-
-class este.app.View.Event extends goog.events.Event
-
-  ###*
-    @param {function(new:este.app.View)} viewClass
-    @param {Object=} params
-    @constructor
-    @extends {goog.events.Event}
-  ###
-  constructor: (@viewClass, @params = null) ->
-    super este.app.View.EventType.REDIRECT
-
-  ###*
-    @type {function(new:este.app.View)}
-  ###
-  viewClass: ->
-
-  ###*
-    @type {Object}
-  ###
-  params: null
